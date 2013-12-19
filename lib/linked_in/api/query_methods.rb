@@ -139,6 +139,10 @@ module LinkedIn
         path = "/people-search"
         if facets = options.delete(:facets_fields)
           path += ":(facets:(#{facets.to_a.map{ |f| "#{ f[0] }#{ f[1] ? ":(#{f[1].join(',')})" : '' }" }.join(',') }))"
+        elsif people_fields = options.delete(:fields)
+          path += ":(people:(#{people_fields.map{ |f| f.to_s.gsub("_","-") }.join(',')}))"
+        else
+          path
         end
       end
 
