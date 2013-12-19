@@ -2,6 +2,11 @@ module LinkedIn
   module Api
 
     module QueryMethods
+      
+      def people_search(options={})
+        path = people_search_path(options)
+        simple_query(path, options)
+      end
 
       def profile(options={})
         path = person_path(options)
@@ -127,6 +132,13 @@ module LinkedIn
           path += "url=#{CGI.escape(url)}"
         else
           path += "~"
+        end
+      end
+      
+      def people_search_path(options)
+        path = "/people-search"
+        if facets = options.delete(:facets_fields)
+          path += ":(facets:(#{facets.to_a.map{ |f| "#{ f[0] }#{ f[1] ? ":(#{f[1].join(',')})" : '' }" }.join(',') }))"
         end
       end
 
